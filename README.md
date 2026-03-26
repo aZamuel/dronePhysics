@@ -185,3 +185,45 @@ Reduktion des Systems auf:
 > lineare Antriebsabbildung (B) + Starrkörperdynamik + einfache Kräfte
 
 Alle Erweiterungen bauen darauf auf.
+
+---
+
+## Implemented API (current repository state)
+
+The repository now includes a small analysis module for actuator allocation:
+
+* `drone_physics.analysis.b_matrix.normalize_direction(direction)`
+  * Validates a 3D direction vector and returns a unit vector.
+  * Raises `ValueError` for invalid dimensionality or zero-length vectors.
+* `drone_physics.analysis.b_matrix.compute_force(direction, command)`
+  * Computes per-thruster force using `F_i = d_i * u_i`.
+* `drone_physics.analysis.b_matrix.compute_moment(position, force)`
+  * Computes per-thruster moment using `M_i = r_i x F_i`.
+* `drone_physics.analysis.b_matrix.build_b_matrix(thrusters)`
+  * Builds a `6 x n` allocation matrix from an ordered thruster list/configuration.
+* `drone_physics.analysis.b_matrix.wrench_from_matrix(B, u)`
+  * Computes total wrench using the matrix-vector product `w = B @ u`.
+* `drone_physics.analysis.b_matrix.compute_wrench(thrusters, u)`
+  * Convenience helper that builds `B` and computes `w`.
+
+### Example
+
+```python
+from drone_physics.analysis.b_matrix import build_b_matrix, compute_wrench
+from drone_physics.model import Thruster
+
+thrusters = [
+    Thruster(position_body=(1.0, 0.0, 0.0), direction_body=(0.0, 0.0, 1.0)),
+    Thruster(position_body=(0.0, 1.0, 0.0), direction_body=(0.0, 0.0, 1.0)),
+]
+u = [2.0, 3.0]
+
+B = build_b_matrix(thrusters)
+w = compute_wrench(thrusters, u)
+```
+
+Expected wrench in this example:
+
+```text
+w = (0.0, 0.0, 5.0, 3.0, -2.0, 0.0)
+```
