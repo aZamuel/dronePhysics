@@ -15,6 +15,8 @@ if str(SRC_ROOT) not in sys.path:
 
 MODULES = [
     "drone_physics",
+    "drone_physics.analysis",
+    "drone_physics.analysis.b_matrix",
     "drone_physics.model",
     "drone_physics.model.state",
     "drone_physics.model.rigid_body",
