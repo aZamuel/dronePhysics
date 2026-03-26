@@ -32,6 +32,10 @@ x = (p, v, q, ω)
 * q ∈ ℝ⁴: Orientierung als Quaternion (Rotation Body → World)
 * ω ∈ ℝ³: Winkelgeschwindigkeit im Body Frame
 
+### Quaternion-Konvention
+
+Quaternions sind in der Reihenfolge `[w, x, y, z]` gespeichert und beschreiben immer die Orientierung **Body → World**.
+
 ---
 
 ## Koordinatensysteme

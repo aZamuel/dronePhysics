@@ -19,6 +19,9 @@ MODULES = [
     "drone_physics.model.state",
     "drone_physics.model.rigid_body",
     "drone_physics.model.thruster",
+    "drone_physics.math",
+    "drone_physics.math.quaternion",
+    "drone_physics.math.frames",
 ]
 
 
