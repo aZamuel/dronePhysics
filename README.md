@@ -192,25 +192,16 @@ Alle Erweiterungen bauen darauf auf.
 
 ---
 
-## Implemented API (current repository state)
+## Quickstart (concise)
 
-The repository now includes a small analysis module for actuator allocation:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+python -m unittest discover -s tests -p 'test_*.py'
+```
 
-* `drone_physics.analysis.b_matrix.normalize_direction(direction)`
-  * Validates a 3D direction vector and returns a unit vector.
-  * Raises `ValueError` for invalid dimensionality or zero-length vectors.
-* `drone_physics.analysis.b_matrix.compute_force(direction, command)`
-  * Computes per-thruster force using `F_i = d_i * u_i`.
-* `drone_physics.analysis.b_matrix.compute_moment(position, force)`
-  * Computes per-thruster moment using `M_i = r_i x F_i`.
-* `drone_physics.analysis.b_matrix.build_b_matrix(thrusters)`
-  * Builds a `6 x n` allocation matrix from an ordered thruster list/configuration.
-* `drone_physics.analysis.b_matrix.wrench_from_matrix(B, u)`
-  * Computes total wrench using the matrix-vector product `w = B @ u`.
-* `drone_physics.analysis.b_matrix.compute_wrench(thrusters, u)`
-  * Convenience helper that builds `B` and computes `w`.
-
-### Example
+Minimal usage:
 
 ```python
 from drone_physics.analysis.b_matrix import build_b_matrix, compute_wrench
@@ -220,14 +211,11 @@ thrusters = [
     Thruster(position_body=(1.0, 0.0, 0.0), direction_body=(0.0, 0.0, 1.0)),
     Thruster(position_body=(0.0, 1.0, 0.0), direction_body=(0.0, 0.0, 1.0)),
 ]
-u = [2.0, 3.0]
+commands = [2.0, 3.0]
 
 B = build_b_matrix(thrusters)
-w = compute_wrench(thrusters, u)
-```
+wrench = compute_wrench(thrusters, commands)
 
-Expected wrench in this example:
-
-```text
-w = (0.0, 0.0, 5.0, 3.0, -2.0, 0.0)
+print(B)
+print(wrench)  # (0.0, 0.0, 5.0, 3.0, -2.0, 0.0)
 ```
